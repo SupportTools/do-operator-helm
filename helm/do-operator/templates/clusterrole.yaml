@@ -1,0 +1,155 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: do-operator-manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - secrets
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseclusterreferences
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseclusterreferences/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseclusterreferences/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseclusters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseclusters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseclusters/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseuserreferences
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseuserreferences/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseuserreferences/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseusers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseusers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - databases.digitalocean.com
+  resources:
+  - databaseusers/status
+  verbs:
+  - get
+  - patch
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: do-operator-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: do-operator-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---

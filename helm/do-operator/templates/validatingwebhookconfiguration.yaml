@@ -1,0 +1,89 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: do-operator-system/do-operator-serving-cert
+  name: do-operator-validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: do-operator-webhook-service
+      namespace:  do-operator-system
+      path: /validate-databases-digitalocean-com-v1alpha1-databasecluster
+  failurePolicy: Fail
+  name: vdatabasecluster.kb.io
+  rules:
+  - apiGroups:
+    - databases.digitalocean.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - databaseclusters
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: do-operator-webhook-service
+      namespace:  do-operator-system
+      path: /validate-databases-digitalocean-com-v1alpha1-databaseclusterreference
+  failurePolicy: Fail
+  name: vdatabaseclusterreference.kb.io
+  rules:
+  - apiGroups:
+    - databases.digitalocean.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - databaseclusterreferences
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: do-operator-webhook-service
+      namespace:  do-operator-system
+      path: /validate-databases-digitalocean-com-v1alpha1-databaseuser
+  failurePolicy: Fail
+  name: vdatabaseuser.kb.io
+  rules:
+  - apiGroups:
+    - databases.digitalocean.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - databaseusers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: do-operator-webhook-service
+      namespace:  do-operator-system
+      path: /validate-databases-digitalocean-com-v1alpha1-databaseuserreference
+  failurePolicy: Fail
+  name: vdatabaseuserreference.kb.io
+  rules:
+  - apiGroups:
+    - databases.digitalocean.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - databaseuserreferences
+  sideEffects: None
+---

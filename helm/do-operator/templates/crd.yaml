@@ -1,0 +1,385 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: do-operator-system/do-operator-serving-cert
+    controller-gen.kubebuilder.io/version: v0.9.0
+  name: databaseclusterreferences.databases.digitalocean.com
+spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: do-operator-webhook-service
+          namespace: do-operator-system
+          path: /convert
+      conversionReviewVersions:
+      - v1
+  group: databases.digitalocean.com
+  names:
+    kind: DatabaseClusterReference
+    listKind: DatabaseClusterReferenceList
+    plural: databaseclusterreferences
+    singular: databaseclusterreference
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .status.engine
+      name: Engine
+      type: string
+    - jsonPath: .status.name
+      name: Cluster name
+      type: string
+    - jsonPath: .status.status
+      name: Status
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: DatabaseClusterReference is the Schema for the databaseclusterreferences API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: DatabaseClusterReferenceSpec defines the desired state of DatabaseClusterReference
+            properties:
+              uuid:
+                description: UUID is the UUID of an existing database.
+                type: string
+            required:
+            - uuid
+            type: object
+          status:
+            description: DatabaseClusterReferenceStatus defines the observed state of DatabaseClusterReference
+            properties:
+              createdAt:
+                description: CreatedAt is the time at which the database cluster was created.
+                format: date-time
+                type: string
+              engine:
+                description: Engine is the database engine to use.
+                type: string
+              name:
+                description: Name is the name of the database cluster.
+                type: string
+              numNodes:
+                description: NumNodes is the number of nodes in the database cluster.
+                format: int64
+                type: integer
+              region:
+                description: Region is the slug of the DO region for the cluster.
+                type: string
+              size:
+                description: Size is the slug of the node size to use.
+                type: string
+              status:
+                description: Status is the status of the database cluster.
+                type: string
+              version:
+                description: Version is the DB version to use.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: do-operator-system/do-operator-serving-cert
+    controller-gen.kubebuilder.io/version: v0.9.0
+  name: databaseclusters.databases.digitalocean.com
+spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: do-operator-webhook-service
+          namespace:  do-operator-system
+          path: /convert
+      conversionReviewVersions:
+      - v1
+  group: databases.digitalocean.com
+  names:
+    kind: DatabaseCluster
+    listKind: DatabaseClusterList
+    plural: databaseclusters
+    singular: databasecluster
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .spec.engine
+      name: Engine
+      type: string
+    - jsonPath: .spec.name
+      name: Cluster name
+      type: string
+    - jsonPath: .status.status
+      name: Status
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: DatabaseCluster is the Schema for the databaseclusters API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: DatabaseClusterSpec defines the desired state of DatabaseCluster
+            properties:
+              engine:
+                description: Engine is the database engine to use.
+                type: string
+              name:
+                description: Name is the name of the database cluster.
+                type: string
+              numNodes:
+                description: NumNodes is the number of nodes in the database cluster.
+                format: int64
+                type: integer
+              region:
+                description: Region is the slug of the DO region for the cluster.
+                type: string
+              size:
+                description: Size is the slug of the node size to use.
+                type: string
+              version:
+                description: Version is the DB version to use.
+                type: string
+            required:
+            - engine
+            - name
+            - numNodes
+            - region
+            - size
+            - version
+            type: object
+          status:
+            description: DatabaseClusterStatus defines the observed state of DatabaseCluster
+            properties:
+              createdAt:
+                description: CreatedAt is the time at which the database cluster was created.
+                format: date-time
+                type: string
+              status:
+                description: Status is the status of the database cluster.
+                type: string
+              uuid:
+                description: UUID is the UUID of the database cluster.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: do-operator-system/do-operator-serving-cert
+    controller-gen.kubebuilder.io/version: v0.9.0
+  name: databaseuserreferences.databases.digitalocean.com
+spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: do-operator-webhook-service
+          namespace:  do-operator-system
+          path: /convert
+      conversionReviewVersions:
+      - v1
+  group: databases.digitalocean.com
+  names:
+    kind: DatabaseUserReference
+    listKind: DatabaseUserReferenceList
+    plural: databaseuserreferences
+    singular: databaseuserreference
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .spec.databaseCluster.name
+      name: Cluster name
+      type: string
+    - jsonPath: .spec.username
+      name: Username
+      type: string
+    - jsonPath: .status.role
+      name: Role
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: DatabaseUserReference is the Schema for the databaseuserreferences API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: DatabaseUserReferenceSpec defines the desired state of DatabaseUserReference
+            properties:
+              databaseCluster:
+                description: Cluster is a reference to the DatabaseCluster or DatabaseClusterReference that represents the database cluster in which the user exists.
+                properties:
+                  apiGroup:
+                    description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+                    type: string
+                  kind:
+                    description: Kind is the type of resource being referenced
+                    type: string
+                  name:
+                    description: Name is the name of resource being referenced
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              username:
+                description: Username is the username of the referenced user.
+                type: string
+            required:
+            - databaseCluster
+            - username
+            type: object
+          status:
+            description: DatabaseUserReferenceStatus defines the observed state of DatabaseUserReference
+            properties:
+              clusterUUID:
+                description: ClusterUUID is the UUID of the cluster this user is in. We keep this in the status so that we can reference the user even if the referenced Cluster CR is deleted.
+                type: string
+              role:
+                description: Role is the user's role.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: do-operator-system/do-operator-serving-cert
+    controller-gen.kubebuilder.io/version: v0.9.0
+  name: databaseusers.databases.digitalocean.com
+spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: do-operator-webhook-service
+          namespace:  do-operator-system
+          path: /convert
+      conversionReviewVersions:
+      - v1
+  group: databases.digitalocean.com
+  names:
+    kind: DatabaseUser
+    listKind: DatabaseUserList
+    plural: databaseusers
+    singular: databaseuser
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - jsonPath: .spec.username
+      name: Username
+      type: string
+    - jsonPath: .status.role
+      name: Role
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: DatabaseUser is the Schema for the databaseusers API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: DatabaseUserSpec defines the desired state of DatabaseUser
+            properties:
+              databaseCluster:
+                description: Cluster is a reference to the DatabaseCluster or DatabaseClusterReference that represents the database cluster in which the user will be created.
+                properties:
+                  apiGroup:
+                    description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+                    type: string
+                  kind:
+                    description: Kind is the type of resource being referenced
+                    type: string
+                  name:
+                    description: Name is the name of resource being referenced
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              username:
+                description: Username is the username for the user.
+                type: string
+            required:
+            - databaseCluster
+            - username
+            type: object
+          status:
+            description: DatabaseUserStatus defines the observed state of DatabaseUser
+            properties:
+              clusterUUID:
+                description: ClusterUUID is the UUID of the cluster this user is in. We keep this in the status so that we can manage the user even if the referenced Cluster CR is deleted.
+                type: string
+              role:
+                description: Role is the user's role.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---

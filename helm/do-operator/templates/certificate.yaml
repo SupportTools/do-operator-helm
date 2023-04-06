@@ -1,0 +1,14 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: do-operator-serving-cert
+spec:
+  dnsNames:
+  - do-operator-webhook-service.do-operator-system.svc
+  - do-operator-webhook-service.do-operator-system.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: do-operator-selfsigned-issuer
+  secretName: webhook-server-cert
+---
