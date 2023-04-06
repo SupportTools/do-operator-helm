@@ -24,9 +24,9 @@ jobs:
           export APP_VERSION="0.1.${{ github.run_number }}"
           echo "CHART_VERSION=${CHART_VERSION}"
           echo "APP_VERSION=${APP_VERSION}"
-          envsubst < do-operator/Chart.yaml > do-operator/Chart.yaml
-          envsubst < do-operator/values.yaml > do-operator/values.yaml
-          helm package do-operator --destination repo
+          envsubst < do-operator/Chart.yaml.template > do-operator/Chart.yaml
+          envsubst < do-operator/values.yaml.template > do-operator/values.yaml
+          helm package do-operator --destination helm/repo
 
       - name: Checkout helm-chart repository
         uses: actions/checkout@v2
@@ -42,7 +42,7 @@ jobs:
 
       - name: Update Helm repository
         run: |
-          cp repo/do-operator-*.tgz helm-chart/
+          cp helm/repo/do-operator-*.tgz helm-chart/
           cd helm-chart
           helm repo index . --url https://<YOUR-HELM-CHART-REPOSITORY-URL>/
           git add .
