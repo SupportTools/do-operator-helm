@@ -1,0 +1,16 @@
+apiVersion: v2
+name: do-operator
+description: A Helm chart for deploying the DigitalOcean Operator
+version: ${CHART_VERSION}
+appVersion: ${APP_VERSION}
+keywords:
+- kubernetes
+- operator
+- digitalocean
+home: https://github.com/digitalocean/do-operator
+sources:
+- https://github.com/digitalocean/do-operator
+maintainers:
+- name: mattmattox
+  email: mmattox@support.tools
+icon: https://opengraph.githubassets.com/a8f624fdfdae9473f3287bed2233438eb2d1c754085433f6c9d9025026a54178/digitalocean/do-operator
